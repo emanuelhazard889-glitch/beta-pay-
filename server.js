@@ -1,4 +1,4 @@
-Const TelegramBot = require('node-telegram-bot-api');
+const TelegramBot = require('node-telegram-bot-api');
 const mongoose = require('mongoose');
 const http = require('http'); // ለ Dummy Server
 
