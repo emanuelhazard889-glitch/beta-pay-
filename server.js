@@ -10,8 +10,17 @@ const PROOF_CHANNEL = '@beta_pay_proof'; // የላክከው ቻናል
 
 const bot = new TelegramBot(TOKEN, { polling: true });
 
-// 2. MongoDB Schemas (የመረጃ ቋት አወቃቀር)
-mongoose.connect(MONGO_URL).then(() => console.log("Database Connected Successfully")).catch(err => console.log(err));
+// 2. MongoDB Schemas እና ዳታዎችን በአንድ ጊዜ የማጽጃ ኮድ (Reset)
+mongoose.connect(MONGO_URL).then(async () => {
+    console.log("Database Connected Successfully");
+    
+    // ⚠️ ሁሉንም የዩዘር ባላንስ እና ዳታዎች ለማጽዳት ይህን ኮድ ጨምረናል
+    await User.deleteMany({});
+    await Channel.deleteMany({});
+    await Config.updateOne({ key: "main" }, { totalWithdrawn: 0, refReward: 2 }, { upsert: true });
+    console.log("All users and data have been completely reset!");
+
+}).catch(err => console.log(err));
 
 const User = mongoose.model('User', { 
     userId: Number, 
